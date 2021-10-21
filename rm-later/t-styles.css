@@ -1,0 +1,91 @@
+* {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+li {
+    list-style-type: none;
+}
+
+.wrapper {
+    background-color: #2D303D;
+    display: flex;
+    /* Добавить ссылку на flex-ы */
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    /* Добавить ссылку на единицы измерений в css */
+    /* Добавить ссылку на позиционирование элементов */
+}
+
+.todo-app {
+    background-color: #343745;
+    color: #FFFFFF;
+    padding: 44px 40px 36px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.todo-app__header {
+    color: #E5E5E5;
+    margin-bottom: 44px;
+}
+
+.todo-app__list {
+    margin-bottom: 44px;
+}
+
+.todo-list__todo {
+    margin-bottom: 12px;
+    background-color: #414450;
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.todo-list__todo:hover {
+    background-color: #565967;
+}
+
+.todo-list__todo_done {
+    background-color: #3C5980;
+    text-decoration: line-through;
+}
+.todo-list__todo_done:hover {
+    background-color: #476898;
+}
+
+.todo-app__todo-text {
+    margin-left: 12px;
+}
+
+.todo-app__new-todo {
+    /*width: 100%;*/
+    display: flex;
+}
+
+.todo-app__new-todo-value {
+    border: none;
+    outline: none;
+    /* Добавить ссылку на flex-ы */
+    flex-grow: 2;
+    padding-left: 12px;
+    margin-right: 12px;
+    border-radius: 8px;
+}
+
+.todo-app__add-todo {
+    background-color: #4a8fe7;
+    border: none;
+    outline: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #FFFFFF;
+}
+
+.todo-app__add-todo:active {
+    background-color: #539fff;
+}

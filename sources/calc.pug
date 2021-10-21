@@ -1,0 +1,44 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        link(rel="stylesheet", href="calc.css")
+        title Calculator
+
+    body
+        h1 Calculator
+        .calc
+            .calc__answer(style={visibility: "hidden"})
+                p 0
+            .calc__input
+                input(type="text")
+
+            .calc__rows
+                .calc__rows-1
+                    button C
+                    button &lt;-
+                    button %
+                    button ÷
+                .calc__rows-2
+                    button 7
+                    button 8
+                    button 9
+                    button ×
+                .calc__rows-3
+                    button 4
+                    button 5
+                    button 6
+                    button -
+                .calc__rows-4
+                    button 1
+                    button 2
+                    button 3
+                    button +
+                .calc__rows-5
+                    button 0
+                    button \=
+
+    footer
+        script(src="calc.js")

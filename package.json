@@ -1,0 +1,39 @@
+{
+  "name": "calc",
+  "version": "0.1.0",
+  "description": "Overly-sophisticated example of a Factory method for a calculator with a simple css view. Made by Yakov Mutalenko in order to redeem his academic debt.",
+  "main": "compiled/calc.js",
+  "scripts": {
+    "test": "echo \"don't ever test this thing out\n\"",
+    "clean": "shx rm -rf compiled && sleep 2 && shx mkdir compiled && sleep 5",
+    "watch": "npm run clean && npm run watch-markup & npm run watch-styles & npm run watch-code & npm run watch-page",
+    "watch-markup": "sleep 2 && pug -w sources -o compiled -P",
+    "watch-styles": "sleep 2 && sass -w sources:compiled --no-source-map --verbose --poll",
+    "watch-code": "sleep 2 && tsc -w --rootDir sources --target es5 --outDir compiled",
+    "watch-page": "sleep 10 && browser-sync start --server './compiled' --index 'calc.html' --port 8081",
+    "compile": "npm run clean && npm run compile-css && npm run compile-html && npm run compile-js",
+    "compile-css": "sleep 2 && sass sources:compiled --no-source-map --verbose",
+    "compile-html": "sleep 2 && pug sources/calc.pug --out compiled",
+    "compile-js": "sleep 2 && tsc --rootDir sources --target es5 --outDir compiled"
+  },
+  "keywords": [
+    "university",
+    "academic",
+    "debts",
+    "6",
+    "months",
+    "after",
+    "deadline",
+    "nice"
+  ],
+  "author": "Yakov Mutalenko",
+  "license": "WTFPL",
+  "devDependencies": {
+    "browser-sync": "^2.27.5",
+    "pug": "^3.0.2",
+    "pug-cli": "^1.0.0-alpha6",
+    "sass": "^1.43.2",
+    "shx": "^0.3.3",
+    "typescript": "^4.4.4"
+  }
+}
