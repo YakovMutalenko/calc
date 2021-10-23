@@ -1,54 +1,83 @@
 const buttons: NodeList = document.querySelectorAll('button.calc__buttons-button')
 const input: HTMLInputElement | null = document.querySelector('input.calc__input')
 
+enum EOperation {
+    none = '',
+    multiplication = '×',
+    division = '/',
+    remainder = '%',
+    substraction = '-',
+    addition = '+',
+}
+
+// type TValue = ...EOperation
+
+enum EValue {
+    zero = '0',
+    one = '1',
+    two = '2',
+    three = '3',
+    four = '4',
+    five = '5',
+    six = '6',
+    seven = '7',
+    eight = '8',
+    nine = '9'
+}
+
+let dot: boolean = false // or state { point/dot: false }
 let value: string = ''
-let dot: boolean = false
-let action: string | null = null
+let action: EOperation = EOperation.none
+
+// TODO: minus before the number should make a number negative
 
 for (let i = 0; i < buttons.length; i += 1) {
-    buttons[ i ]?.addEventListener('click', () => {
+    buttons[i]?.addEventListener('click', () => {
         const buttonValue = (buttons[i] as HTMLElement)?.innerText.toString()
 
+        // convert to smth OR just pass the initial strings to smth
+        // use smth as a key to retrieve objects/functions?
+
         switch (buttonValue) {
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
+            case EValue.zero:
+            case EValue.one:
+            case EValue.two:
+            case EValue.three:
+            case EValue.four:
+            case EValue.five:
+            case EValue.six:
+            case EValue.seven:
+            case EValue.eight:
+            case EValue.nine:
                 switch (action) {
-                    case 'mod':
+                    case EOperation.remainder:
                         value = String(Number(value) % Number(buttonValue))
                         break
-                    case 'div':
+                    case EOperation.division:
                         value = String(Number(value) / Number(buttonValue))
                         break
-                    case 'mul':
+                    case EOperation.multiplication:
                         value = String(Number(value) * Number(buttonValue))
                         break
-                    case 'minus':
+                    case EOperation.substraction:
                         value = String(Number(value) - Number(buttonValue))
                         break
-                    case 'plus':
+                    case EOperation.addition:
                         value = String(Number(value) + Number(buttonValue))
                         break
                     default:
                         value += buttonValue
                         break
                 }
-                action = null
+                action = EOperation.none
                 break
             case '.':
-                action = null
+                action = EOperation.none
 
                 if (dot === false) {
                     value += '.'
                     dot = true
-                } else if (value[ value.length - 1 ] === '.') {
+                } else if (value[value.length - 1] === '.') {
                     value = value.substring(0, value.length - 1)
                     dot = false
                 }
@@ -56,7 +85,7 @@ for (let i = 0; i < buttons.length; i += 1) {
             case '=':
                 alert('Бесполезная кнопка :)')
                 console.log('this thing is useless')
-                break;
+                break
             case 'C':
                 value = ''
                 dot = false
@@ -64,22 +93,13 @@ for (let i = 0; i < buttons.length; i += 1) {
             case 'D':
                 value = value.length > 0 ? value.substring(0, value.length - 1) : ''
                 break
-            case '%':
-                action = 'mod'
-                break
-            case '×':
-                action = 'mul'
-                break
-            case '/':
-                action = 'div'
-                break
-            case '-':
-                action = 'minus'
-                break
-            case '+':
-                action = 'plus'
-                break
+            case EOperation.remainder:
+            case EOperation.multiplication:
+            case EOperation.division:
+            case EOperation.substraction:
+            case EOperation.addition:
             default:
+                action = EOperation.none
                 break
         }
 
