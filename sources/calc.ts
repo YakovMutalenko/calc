@@ -1,13 +1,13 @@
-const buttons = document.querySelectorAll('button.calc__buttons-button')
-const input = document.querySelector('input.calc__input') as HTMLInputElement
+const buttons: NodeList = document.querySelectorAll('button.calc__buttons-button')
+const input: HTMLInputElement | null = document.querySelector('input.calc__input')
 
-let value = ''
-let dot = false
-let action = null
+let value: string = ''
+let dot: boolean = false
+let action: string | null = null
 
 for (let i = 0; i < buttons.length; i += 1) {
-    buttons[ i ]?.addEventListener('click', function () {
-        const buttonValue = this.innerText.toString()
+    buttons[ i ]?.addEventListener('click', () => {
+        const buttonValue = (buttons[i] as HTMLElement)?.innerText.toString()
 
         switch (buttonValue) {
             case '0':
@@ -83,17 +83,8 @@ for (let i = 0; i < buttons.length; i += 1) {
                 break
         }
 
-        if (input) {
+        if (input !== null) {
             input.value = value
         }
     })
 }
-
-/*
-    TODO: Типы кнопок - enum
-    TODO: Кнопка =
-    TODO: strict typing
-    TODO: add fabric right there or as a separate method
-
-    until tomorrow
-*/
