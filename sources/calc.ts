@@ -59,13 +59,10 @@ for (let i = 0; i < buttons.length; i += 1) {
                 break;
             case 'C':
                 value = ''
+                dot = false
                 break
             case 'D':
-                if (value.length > 0) {
-                    value = value.substring(0, value.length - 1)
-                } else {
-                    value = ''
-                }
+                value = value.length > 0 ? value.substring(0, value.length - 1) : ''
                 break
             case '%':
                 action = 'mod'
@@ -86,10 +83,17 @@ for (let i = 0; i < buttons.length; i += 1) {
                 break
         }
 
-        input.value = value
+        if (input) {
+            input.value = value
+        }
     })
 }
 
-// Хотел бы показать Фабричный метод прямо в калькуляторе,
-// но обошёлся простыми switch :)
-// Могу просто объяснить суть и написать абстрактный код.
+/*
+    TODO: Типы кнопок - enum
+    TODO: Кнопка =
+    TODO: strict typing
+    TODO: add fabric right there or as a separate method
+
+    until tomorrow
+*/
