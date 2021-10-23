@@ -1,16 +1,20 @@
 const buttons: NodeList = document.querySelectorAll('button.calc__buttons-button')
 const input: HTMLInputElement | null = document.querySelector('input.calc__input')
 
-enum EOperation {
-    none           = '',
-    multiplication = '×',
-    division       = '/',
-    remainder      = '%',
-    substraction   = '-',
-    addition       = '+',
+enum Operations {
+    none = '',
+    clear = 'C',
+    delete = 'D',
+    remainder = '%',
+    divide = '/',
+    multiply = '×',
+    substract = '-',
+    add = '+',
+    pointToggle = '.',
+    evaluate = '=',
 }
 
-enum EValue {
+enum Values {
     zero = '0',
     one = '1',
     two = '2',
@@ -23,78 +27,101 @@ enum EValue {
     nine = '9'
 }
 
-let dot: boolean = false // or state { point/dot: false }
+let state = {
+    sign: false,
+    point: false,
+}
 let value: string = ''
-let action: EOperation = EOperation.none
+let action: Operations = Operations.none
 
-// TODO: minus before the number should make a number negative
-
-for (let i = 0; i < buttons.length; i += 1) {
-    buttons[i]?.addEventListener('click', () => {
-        const buttonValue = (buttons[i] as HTMLElement)?.innerText.toString()
+buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+        const buttonValue = (button as HTMLElement)?.innerText.toString()
 
         switch (buttonValue) {
-            case EValue.zero:
-            case EValue.one:
-            case EValue.two:
-            case EValue.three:
-            case EValue.four:
-            case EValue.five:
-            case EValue.six:
-            case EValue.seven:
-            case EValue.eight:
-            case EValue.nine:
+            case Values.zero:
+            case Values.one:
+            case Values.two:
+            case Values.three:
+            case Values.four:
+            case Values.five:
+            case Values.six:
+            case Values.seven:
+            case Values.eight:
+            case Values.nine:
                 switch (action) {
-                    case EOperation.remainder:
+                    case Operations.remainder:
                         value = String(Number(value) % Number(buttonValue))
                         break
-                    case EOperation.division:
+                    case Operations.divide:
                         value = String(Number(value) / Number(buttonValue))
                         break
-                    case EOperation.multiplication:
-                        value = String(Number(value) * Number(buttonValue))
-                        break
-                    case EOperation.substraction:
+                    case Operations.substract:
                         value = String(Number(value) - Number(buttonValue))
                         break
-                    case EOperation.addition:
+                    case Operations.multiply:
+                        value = String(Number(value) * Number(buttonValue))
+                        break
+                    case Operations.add:
                         value = String(Number(value) + Number(buttonValue))
                         break
                     default:
                         value += buttonValue
                         break
                 }
-                action = EOperation.none
+                action = Operations.none
                 break
-            case '.':
-                action = EOperation.none
 
-                if (dot === false) {
+            case Operations.pointToggle:
+                action = Operations.none
+
+                if (value.indexOf('.') === -1) {
+                    state.point = true
                     value += '.'
-                    dot = true
-                } else if (value[value.length - 1] === '.') {
-                    value = value.substring(0, value.length - 1)
-                    dot = false
+                    break
                 }
+
+                if (value.lastIndexOf('.') === value.length - 1) {
+                    value = value.length > 0 ? value.substring(0, value.length - 1) : ''
+                    state.point = false
+                }
+
                 break
-            case '=':
+
+            case Operations.evaluate:
+                action = Operations.none
                 alert('Бесполезная кнопка :)')
                 console.log('this thing is useless')
                 break
-            case 'C':
+
+            case Operations.clear:
+                action = Operations.none
                 value = ''
-                dot = false
+                state.point = false
+                state.sign = false
                 break
-            case 'D':
+
+            case Operations.delete:
+                action = Operations.none
+
+                if (value.lastIndexOf('.') === value.length - 1) {
+                    state.point = false
+                }
+
+                if (value.lastIndexOf('-') === value.length - 1) {
+                    state.sign = false
+                }
+
                 value = value.length > 0 ? value.substring(0, value.length - 1) : ''
                 break
-            case EOperation.remainder:
-            case EOperation.multiplication:
-            case EOperation.division:
-            case EOperation.substraction:
-            case EOperation.addition:
+
+            case Operations.substract:
+            case Operations.remainder:
+            case Operations.multiply:
+            case Operations.divide:
+            case Operations.add:
             default:
-                action = buttonValue as EOperation
+                action = buttonValue as Operations
                 break
         }
 
@@ -102,4 +129,4 @@ for (let i = 0; i < buttons.length; i += 1) {
             input.value = value
         }
     })
-}
+})
