@@ -2,15 +2,24 @@ const buttons: NodeList = document.querySelectorAll('button.calc__buttons-button
 const input: HTMLInputElement | null = document.querySelector('input.calc__input')
 
 enum EOperation {
-    none = '',
+    none           = '',
     multiplication = '×',
-    division = '/',
-    remainder = '%',
-    substraction = '-',
-    addition = '+',
+    division       = '/',
+    remainder      = '%',
+    substraction   = '-',
+    addition       = '+',
 }
 
-// type TValue = ...EOperation
+// reverse mapping?
+// enum EReverseOperation {
+//     '' = EOperation.none
+// }
+
+// action
+// operation
+
+// buttonValue to EType?
+// and then just use it
 
 enum EValue {
     zero = '0',
@@ -99,7 +108,7 @@ for (let i = 0; i < buttons.length; i += 1) {
             case EOperation.substraction:
             case EOperation.addition:
             default:
-                action = EOperation.none
+                action = buttonValue as EOperation
                 break
         }
 
@@ -108,3 +117,42 @@ for (let i = 0; i < buttons.length; i += 1) {
         }
     })
 }
+
+// .gitignore:
+enum ETest {
+    none = '',
+    C = 'C',
+    D = 'D',
+    division = '/'
+}
+
+type TTest = EOperation //'' | 'C' | 'D' | '%' | '/'
+// yo! type works just like I needed
+// and type of TTest works too!
+// and just 'test as keyof EOperation' too!
+
+var test = (buttons[3] as HTMLElement).innerText.toString()
+// console.log(ETest[test])
+console.log(ETest[test as keyof typeof ETest])
+console.log(ETest[test as unknown as keyof typeof ETest])
+console.log(test as keyof ETest)
+console.log(test as keyof EOperation)
+
+enum Mode {
+    Silent = <any>'Silent',
+    Normal = <any>'Normal',
+    Deleted = <any>'Deleted'
+}
+
+let modeStr: string = "Silent"
+let mode: Mode
+
+console.log(Mode[modeStr as any])
+console.log(Mode.Normal)
+console.log(Mode["asd" as any])
+
+// var test2: EOperation = EOperation.none
+// switch (test2 as keyof typeof EOperation) {
+//     case EOperation:
+//         break;
+// }
