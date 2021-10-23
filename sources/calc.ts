@@ -10,17 +10,6 @@ enum EOperation {
     addition       = '+',
 }
 
-// reverse mapping?
-// enum EReverseOperation {
-//     '' = EOperation.none
-// }
-
-// action
-// operation
-
-// buttonValue to EType?
-// and then just use it
-
 enum EValue {
     zero = '0',
     one = '1',
@@ -43,9 +32,6 @@ let action: EOperation = EOperation.none
 for (let i = 0; i < buttons.length; i += 1) {
     buttons[i]?.addEventListener('click', () => {
         const buttonValue = (buttons[i] as HTMLElement)?.innerText.toString()
-
-        // convert to smth OR just pass the initial strings to smth
-        // use smth as a key to retrieve objects/functions?
 
         switch (buttonValue) {
             case EValue.zero:
@@ -117,42 +103,3 @@ for (let i = 0; i < buttons.length; i += 1) {
         }
     })
 }
-
-// .gitignore:
-enum ETest {
-    none = '',
-    C = 'C',
-    D = 'D',
-    division = '/'
-}
-
-type TTest = EOperation //'' | 'C' | 'D' | '%' | '/'
-// yo! type works just like I needed
-// and type of TTest works too!
-// and just 'test as keyof EOperation' too!
-
-var test = (buttons[3] as HTMLElement).innerText.toString()
-// console.log(ETest[test])
-console.log(ETest[test as keyof typeof ETest])
-console.log(ETest[test as unknown as keyof typeof ETest])
-console.log(test as keyof ETest)
-console.log(test as keyof EOperation)
-
-enum Mode {
-    Silent = <any>'Silent',
-    Normal = <any>'Normal',
-    Deleted = <any>'Deleted'
-}
-
-let modeStr: string = "Silent"
-let mode: Mode
-
-console.log(Mode[modeStr as any])
-console.log(Mode.Normal)
-console.log(Mode["asd" as any])
-
-// var test2: EOperation = EOperation.none
-// switch (test2 as keyof typeof EOperation) {
-//     case EOperation:
-//         break;
-// }
