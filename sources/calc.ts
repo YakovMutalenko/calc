@@ -49,14 +49,12 @@ class Operand {
 class CalcState {
     private _firstOperand: Operand
     private _secondOperand: Operand
-    private _currentOperand: Operand
     private _currentOperandEnum: OperandEnum
     private _operation: Operations
 
     constructor() {
         this._firstOperand = new Operand()
         this._secondOperand = new Operand()
-        this._currentOperand = this._firstOperand
         this._currentOperandEnum = OperandEnum.first
         this._operation = Operations.none
     }
@@ -86,11 +84,17 @@ class CalcState {
     }
 
     public get currentOperand(): Operand {
-        return this._currentOperand
+        if (this._currentOperandEnum === OperandEnum.first) {
+            return this._firstOperand
+        }
+        return this._secondOperand
     }
 
     public set currentOperand(o: Operand) {
-        this._currentOperand = o
+        if (this._currentOperandEnum === OperandEnum.first) {
+            this._firstOperand = o
+        }
+        this._secondOperand = o
     }
 
     public get currentOperandEnum(): OperandEnum {
@@ -100,94 +104,80 @@ class CalcState {
     public switchCurrentOperand() {
         if (this._currentOperandEnum === OperandEnum.first) {
             this._currentOperandEnum = OperandEnum.second
-            this._currentOperand = this._secondOperand
             return
         }
         this._currentOperandEnum = OperandEnum.first
-        this._currentOperand = this._firstOperand
-
-        /* if (this._currentOperand === this._firstOperand) {
-            this._currentOperand = this._secondOperand
-            return
-        }
-        this._currentOperand = this._firstOperand */
     }
 }
 
 class Calc {
     private _state: CalcState
-    private _input: HTMLInputElement | null
     private _init: boolean
 
     constructor() {
         this._state = new CalcState()
-        this._input = this.initInput()
         this._init = false
     }
 
     public init() {
         if (this._init) { return } else { this._init = true }
 
-        if (!this._input) {
-            alert('No input field found, stopping initialization')
-            return
-        }
-
-        this.initButtons()
-    }
-
-    private initInput() {
-        return document.querySelector('input.calc__input') as HTMLInputElement | null
-    }
-
-    private initButtons() {
         const buttons: NodeList = document.querySelectorAll('button.calc__buttons-button')
 
         buttons.forEach((button) => {
             button.addEventListener('click', () => {
-                const buttonValue = (button as HTMLElement)?.innerText.toString()
+                const buttonAction = () => {
+                    const buttonValue = (button as HTMLElement)?.innerText.toString()
 
-                if ('0123456789'.indexOf(buttonValue) !== -1) {
-                    this.appendValue(buttonValue)
-                    return
-                }
-
-                if (buttonValue === Operations.clear) {
-                    // TODO: clear - screen, fp, both first and second, current and currentEnum
-                    return
-                }
-
-                if (buttonValue === Operations.delete) {
-                    // TODO: delete
-                    return
-                }
-
-                if (buttonValue === Operations.pointToggle) {
-                    this.toggleFloatingPoint()
-                    return
-                }
-
-                if (buttonValue in [
-                    Operations.substract,
-                    Operations.add,
-                    Operations.multiply,
-                    Operations.divide,
-                    Operations.remainder
-                ]) {
-                    if (this.getEnum() === OperandEnum.first) {
-                        // TODO: switch and start gathering second one
+                    if ('0123456789'.indexOf(buttonValue) !== -1) {
+                        this.appendValue(buttonValue)
                         return
                     }
-                    // TODO: change the current operation?V or just no-op?X
-                    return
+
+                    if (buttonValue === Operations.clear) {
+                        // TODO: clear - screen, fp, both first and second, current and currentEnum
+                        return
+                    }
+
+                    if (buttonValue === Operations.delete) {
+                        // TODO: delete
+                        return
+                    }
+
+                    if (buttonValue === Operations.pointToggle) {
+                        this.toggleFloatingPoint()
+                        return
+                    }
+
+                    if (buttonValue in [
+                        Operations.substract,
+                        Operations.add,
+                        Operations.multiply,
+                        Operations.divide,
+                        Operations.remainder
+                    ]) {
+                        if (this.getEnum() === OperandEnum.first) {
+                            // TODO: switch and start gathering second one
+                            return
+                        }
+                        // TODO: change the current operation?V or just no-op?X
+                        return
+                    }
+
+                    if (buttonValue === Operations.evaluate) {
+                        // TODO: evaluate
+                        // if just one -> return itself
+                        // if two -> evaluate, place the result in the first one and clear the second one
+                        return
+                    }
+
+                    alert('Easter Egg found! Not a bug, but a feature!')
                 }
 
-                if (buttonValue === Operations.evaluate) {
-                    // TODO: evaluate
-                    return
-                }
+                buttonAction()
 
-                alert('Easter Egg found! Not a bug, but a feature!')
+                const input: HTMLInputElement | null = document.querySelector('input.calc__input')
+                if (input) { input.value = this.getValue() }
             })
         })
     }
@@ -196,10 +186,24 @@ class Calc {
         this._state.operation = Operations.none
     }
 
-    private clear() {
+    private clearAll() {
         this.interruptOperations()
         // UNDONE
     }
+
+    private deleteLast() {
+        //...
+    }
+
+    private evaluate() {
+        //...
+    }
+
+    private switchOperation() {
+        // left, //switch to second, if not already
+    }
+
+    // private
 
     private getEnum(): OperandEnum {
         return this._state.currentOperandEnum
