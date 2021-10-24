@@ -164,12 +164,15 @@ class Calc {
                         case Operations.divide:
                         case Operations.remainder:
                             if (this.getEnum() === OperandEnum.first) {
+                                this.setOperation(buttonValue as Operations)
                                 this.switchToSecond()
                                 return
                             }
+
                             this.setOperation(buttonValue as Operations)
                             return
                         default:
+                            console.log(this.getOperation(), buttonValue, buttonValue as Operations)
                             break
                     }
 
@@ -241,6 +244,7 @@ class Calc {
                 this.setValue(String(Number(firstValue) + Number(secondValue)))
                 break
             default:
+                console.log(this.getOperation())
                 alert('Whoa, what is that operation?')
                 break
         }
