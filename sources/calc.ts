@@ -316,70 +316,13 @@ class Calc {
         if (value.lastIndexOf('.') === value.length - 1) {
             this.setValue(value.length > 0 ? value.substring(0, value.length - 1) : '')
             this.setFloatingPoint(false)
+            return
+        }
+
+        if (this.getFloatingPoint() === false) {
+            this.setFloatingPoint(true)
         }
     }
-
-    /* switch (buttonValue) {
-        case Values.eight:
-        case Values.nine:
-            switch (this._state.operation) {
-                case Operations.remainder:
-                    this._state.value = String(Number(this._state.value) % Number(buttonValue))
-                    break
-                case Operations.divide:
-                    this._state.value = String(Number(this._state.value) / Number(buttonValue))
-                    break
-                case Operations.substract:
-                    this._state.value = String(Number(this._state.value) - Number(buttonValue))
-                    break
-                case Operations.multiply:
-                    this._state.value = String(Number(this._state.value) * Number(buttonValue))
-                    break
-                case Operations.add:
-                    this._state.value = String(Number(this._state.value) + Number(buttonValue))
-                    break
-                default:
-                    this._state.value += buttonValue
-                    break
-            }
-            operation = Operations.none
-            break
-
-        case Operations.evaluate:
-            operation = Operations.none
-            alert('Бесполезная кнопка :)')
-            console.log('this thing is useless')
-            break
-
-        case Operations.clear:
-            operation = Operations.none
-            value = ''
-            state.point = false
-            break
-
-        case Operations.delete:
-            operation = Operations.none
-
-            if (value.lastIndexOf('.') === value.length - 1) {
-                state.point = false
-            }
-
-            value = value.length > 0 ? value.substring(0, value.length - 1) : ''
-            break
-
-        case Operations.substract:
-        case Operations.remainder:
-        case Operations.multiply:
-        case Operations.divide:
-        case Operations.add:
-        default:
-            operation = buttonValue as Operations
-            break
-    } */
-
-    /* if (input !== null) {
-        input.value = value
-    } */
 }
 
 const calc = new Calc()
