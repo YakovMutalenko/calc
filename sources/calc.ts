@@ -108,6 +108,14 @@ class CalcState {
         }
         this._currentOperandEnum = OperandEnum.first
     }
+
+    public switchToSecondOperand() {
+        this._currentOperandEnum = OperandEnum.second
+    }
+
+    public switchToFirstOperand() {
+        this._currentOperandEnum = OperandEnum.first
+    }
 }
 
 class Calc {
@@ -135,12 +143,12 @@ class Calc {
                     }
 
                     if (buttonValue === Operations.clear) {
-                        // TODO: clear - screen, fp, both first and second, current and currentEnum
+                        this.clearAll()
                         return
                     }
 
                     if (buttonValue === Operations.delete) {
-                        // TODO: delete
+                        this.deleteLast()
                         return
                     }
 
@@ -149,25 +157,28 @@ class Calc {
                         return
                     }
 
-                    if (buttonValue in [
-                        Operations.substract,
-                        Operations.add,
-                        Operations.multiply,
-                        Operations.divide,
-                        Operations.remainder
-                    ]) {
-                        if (this.getEnum() === OperandEnum.first) {
-                            // TODO: switch and start gathering second one
+                    switch (buttonValue) {
+                        case Operations.substract:
+                        case Operations.add:
+                        case Operations.multiply:
+                        case Operations.divide:
+                        case Operations.remainder:
+                            if (this.getEnum() === OperandEnum.first) {
+                                this.switchToSecond()
+                                return
+                            }
+                            this.setOperation(buttonValue as Operations)
                             return
-                        }
-                        // TODO: change the current operation?V or just no-op?X
-                        return
+                        default:
+                            break
                     }
 
                     if (buttonValue === Operations.evaluate) {
-                        // TODO: evaluate
-                        // if just one -> return itself
-                        // if two -> evaluate, place the result in the first one and clear the second one
+                        if (this.getEnum() === OperandEnum.first) {
+                            this.interruptOperations()
+                            return
+                        }
+                        this.evaluate()
                         return
                     }
 
@@ -188,22 +199,81 @@ class Calc {
 
     private clearAll() {
         this.interruptOperations()
-        // UNDONE
+
+        this.clearFirst()
+        this.clearSecond()
+
+        this.switchToFirst()
     }
 
     private deleteLast() {
-        //...
+        this.interruptOperations()
+        let value = this.getValue()
+
+        if (value.lastIndexOf('.') === value.length - 1) {
+            this.setFloatingPoint(false)
+        }
+
+        this.setValue(value.length > 0 ? value.substring(0, value.length - 1) : '')
     }
 
     private evaluate() {
-        //...
+        // if two -> evaluate, place the result in the first one and clear the second one
+        const firstValue = this._state.firstOperand.value
+        const secondValue = this._state.secondOperand.value
+
+        this.switchToFirst()
+
+        switch (this.getOperation()) {
+            case Operations.remainder:
+                this.setValue(String(Number(firstValue) % Number(secondValue)))
+                break
+            case Operations.divide:
+                this.setValue(String(Number(firstValue) / Number(secondValue)))
+                break
+            case Operations.substract:
+                this.setValue(String(Number(firstValue) - Number(secondValue)))
+                break
+            case Operations.multiply:
+                this.setValue(String(Number(firstValue) * Number(secondValue)))
+                break
+            case Operations.add:
+                this.setValue(String(Number(firstValue) + Number(secondValue)))
+                break
+            default:
+                alert('Whoa, what is that operation?')
+                break
+        }
+
+        this.clearSecond()
+        this.interruptOperations()
     }
 
-    private switchOperation() {
-        // left, //switch to second, if not already
+    private getOperation(): Operations {
+        return this._state.operation
     }
 
-    // private
+    private setOperation(o: Operations) {
+        this._state.operation = o
+    }
+
+    private switchToFirst() {
+        this._state.switchToFirstOperand()
+    }
+
+    private clearFirst() {
+        this._state.firstOperand.value = ''
+        this._state.firstOperand.floatingPoint = false
+    }
+
+    private switchToSecond() {
+        this._state.switchToSecondOperand()
+    }
+
+    private clearSecond() {
+        this._state.secondOperand.value = ''
+        this._state.secondOperand.floatingPoint = false
+    }
 
     private getEnum(): OperandEnum {
         return this._state.currentOperandEnum
@@ -246,14 +316,6 @@ class Calc {
     }
 
     /* switch (buttonValue) {
-        case Values.zero:
-        case Values.one:
-        case Values.two:
-        case Values.three:
-        case Values.four:
-        case Values.five:
-        case Values.six:
-        case Values.seven:
         case Values.eight:
         case Values.nine:
             switch (this._state.operation) {
